@@ -1,0 +1,22 @@
+use categories
+db.categories.insert({_id:"MongoDB",parents:"Databases"})
+db.categories.insert({_id:"dbm",parents:"Databases"})
+db.categories.insert({_id:"Databases",parent:"Programming"})
+db.categories.insert({_id:"Languages",parent:"Programming"})
+db.categories.insert({_id:"Programming",parent:"Books"})
+db.categories.insert({_id:"Books",parent:null})
+
+var descendants = [];
+var stack = [];
+var item = db.categories.findOne({_id: "Programming"});
+stack.push(item);
+while (stack.length > 0) {
+	var current = stack.pop();
+        var children =  db.categories.find( {parent: current._id});
+	while (children.hasNext() == true) {
+		var child = children.next();
+		descendants.push(child._id);
+		stack.push(child);
+	}
+}
+descendants; 
